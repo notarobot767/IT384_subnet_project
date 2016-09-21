@@ -42,4 +42,25 @@ class Text_GUI(object):
 
   #subnet menu
   ########################################################
-  
+  def _run_subnet_menu(self):
+    while True:
+      print(
+        #_poundWord(str(tracker.network)) + "\n" +
+        "[1] - Add a device to this subnet\n" +
+        "[2] - Remove a device from this network\n" +
+        "[3] - Display subnet information\n" +
+        "[4] - Exit"
+      )
+
+      choice = self._get_choice()
+
+      if choice == "1":
+        pass
+      elif choice == "2":
+        pass
+      elif choice == "3":
+        pass
+      elif choice == "4":
+        break
+      else:
+        self._print_invalid()

@@ -8,6 +8,4 @@ class Staics(object):
   #View
   ##################################################################
   
-  holder = ""
-
-statics = Statics()
+  pass
