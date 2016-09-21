@@ -10,24 +10,31 @@ class Controller(object):
   def speak(self):
     print("Hi, I'm the Controller!")
 
-  #shows
-  def show_subnets(self):
-    #ans_str = _poundWord("Subnets")
-    ans_str = "Subnets"
-    ans_str += "\nFound {} subnet(s):\n".format(len(self._subnet_db.subnets_lst))
-    i = 1
-    #print(self.subnet_lst)
-    for net in self._subnet_db.subnets_lst:
-      ans_str += "[{}] - {}\n".format(i, net)
-      i += 1
-    ans_str += "[{}] - Go back".format(i)
-    print(ans_str)
-    return i
+  #subnet_db
+  ############################################################
+  def get_subnets_lst(self):
+    return self._subnet_db.subnets_lst  
 
-
-  #adding new subnet
   def add_new_subnet(self, net_str):
-    self._subnet_db.subnets[net_str] = IP_tracker(net_str)
-    self._subnet_db.subnets_lst.append(net_str)
-    self._subnet_db.subnets_lst = sorted(self._subnet_db.subnets_lst,
-      key=lambda x: (ipaddress.IPv4Network(x).network_address))
+    self._subnet_db.add_new_subnet(net_str)
+
+  def delete_subnet(self, net_str):
+    self._subnet_db.delete_subnet(net_str)
+
+  #ip_tracker
+  ############################################################
+  def get_tracker(self, subnet):
+    return self._subnet_db.subnets[subnet]
+
+  def get_hosts_dhcp_avail(self, tracker):
+    return tracker.host_dhcp_avail
+
+  def get_hosts_dhcp_unavail(self, tracker):
+    return tracker.host_dhcp_unavail
+
+  def get_hosts_dhcp_reserved(self, tracker):
+    return tracker.hosts_dhcp_reserved
+
+  def assign_ip(self, tracker, descript):
+    tracker.assign_ip(descript)
+
