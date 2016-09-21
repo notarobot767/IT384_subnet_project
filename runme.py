@@ -1,6 +1,4 @@
-from subnet_package.main import Main
+from subnet_package.main import main
 
 if __name__ == '__main__':
-  main = Main()
-  #main.speak()
-  main.view.text_gui.run_main()
+  main()

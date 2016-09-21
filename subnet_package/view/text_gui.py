@@ -9,7 +9,15 @@ class Text_GUI(object):
   def _poundWord(self, word):
     return "{0}\n#{1}#\n{0}".format("#"*(len(word)+2), word)
 
-  def run_main(self):
+  def _get_choice(self):
+    return input("Enter your choice: ").strip()
+
+  def _print_invalid(self):
+    print("Not a valid choice!\n")
+
+  #main menu
+  ########################################################
+  def run(self):
     while True:
       print(
         self._poundWord("Main Menu") + "\n"
@@ -18,4 +26,20 @@ class Text_GUI(object):
         "[3] - Delete a subnet\n" +
         "[4] - Exit"
         )
-      break
+      
+      choice = self._get_choice()
+
+      if choice == "1":
+        pass
+      elif choice == "2":
+        pass
+      elif choice == "3":
+        pass
+      elif choice == "4":
+        break
+      else:
+        self._print_invalid()
+
+  #subnet menu
+  ########################################################
+  
