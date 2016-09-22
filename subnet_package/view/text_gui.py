@@ -98,9 +98,24 @@ class Text_GUI(object):
         print_str += "{}\t- unassinged\n".format(ip)
     return print_str
 
+  def _show_hosts_reserved(self, tracker):
+    print_str = "Reserved DHCP host IPs:\n"
+    hosts_dhcp_reserved = self.ctrl.get_hosts_dhcp_reserved(tracker)
+    if not hosts_dhcp_reserved:
+      print_str += "None\n"
+    else:
+      descript_map = self.ctrl.get_descript_map(tracker)
+      for ip in sorted(hosts_dhcp_reserved,
+          key=lambda x: (ipaddress.ip_address(x))):
+        print_str += "{}\t- {}\n".format(ip, descript_map[ip])
+    return print_str
+
+
+
   def _show_hosts(self, tracker):
     return self._show_hosts_assigned(tracker) + "\n" + \
-      self._show_hosts_unassigned(tracker)
+      self._show_hosts_unassigned(tracker) + "\n" + \
+      self._show_hosts_reserved(tracker)
 
   def _show_subnet(self, tracker):
     (network, broadcast, gateway, host_range, dns) = self.ctrl.get_subnet_info(tracker)
@@ -121,8 +136,8 @@ class Text_GUI(object):
     ip = self.ctrl.assign_ip(tracker, descript)
     if ip != None:
       device_info = self.ctrl.get_device_info(tracker)
-      print_str = "Enter the following network settins onto this host:\n"
-      print_str = "IP\t\t\t: {}\nSubnet Mask\t\t: {}\n".format(
+      print_str = self._wall
+      print_str += "IP\t\t\t: {}\nSubnet Mask\t\t: {}\n".format(
         ip,
         device_info[0]
         )
@@ -130,6 +145,7 @@ class Text_GUI(object):
         device_info[1],
         device_info[2]
         )
+      print_str += self._wall
     print(print_str)
 
   def _run_subnet_menu(self, tracker):

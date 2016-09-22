@@ -8,11 +8,10 @@ class IP_tracker(object):
     self.host_dhcp_unavail = set()
     self.host_dhcp_reserved = set()
     self.descript_map = dict()
-    #self._set_gateway(self.get_lastHost())
+    self._set_gateway(self.get_lastHost())
 
   def _set_gateway(self, ip):
-    #self._assignIP_man("Default Gateway", ip)
-    self.host_unavail.remove(ip)
+    self.assign_ip("Default Gateway", ip)
 
   def get_CIDR(self):
     return "/" + str(self.network).split("/")[1]
@@ -42,9 +41,12 @@ class IP_tracker(object):
   def get_hostRange(self):
     return self.get_firstHost() + "-" + self.get_lastHost().split(".")[3]   
 
-  def assign_ip(self, descript):
-    ip = self.host_dhcp_avail.pop()
-    self.host_dhcp_unavail.add(ip)
+  def assign_ip(self, descript, ip=None):
+    if ip == None:
+      ip = self.host_dhcp_avail.pop()
+      self.host_dhcp_unavail.add(ip)
+    else:
+      self.host_dhcp_reserved.add(ip)
     self.descript_map[ip] = descript
     return ip
 

@@ -59,7 +59,7 @@ class Controller(object):
     return tracker.host_dhcp_unavail
 
   def get_hosts_dhcp_reserved(self, tracker):
-    return tracker.hosts_dhcp_reserved
+    return tracker.host_dhcp_reserved
 
   def get_device_info(self, tracker):
     return (
