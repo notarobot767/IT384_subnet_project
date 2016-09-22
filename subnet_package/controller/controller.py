@@ -71,8 +71,10 @@ class Controller(object):
   def get_subnet_info(self, tracker):
     return (
       tracker.network,
+      tracker.get_broadcast(),
+      tracker.get_broadcast(), #gateway
       tracker.get_hostRange(),
-      tracker.get_broadcast()
+      tracker._dns
     )
 
   def get_descript_map(self, tracker):

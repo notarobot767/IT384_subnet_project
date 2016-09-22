@@ -88,7 +88,7 @@ class Text_GUI(object):
     return print_str
 
   def _show_hosts_unassigned(self, tracker):
-    print_str = "Assigned DHCP host IPs:\n"
+    print_str = "Unassigned DHCP host IPs:\n"
     hosts_dhcp_avail = self.ctrl.get_hosts_dhcp_avail(tracker)
     if not hosts_dhcp_avail:
       print_str += "None\n"
@@ -103,12 +103,14 @@ class Text_GUI(object):
       self._show_hosts_unassigned(tracker)
 
   def _show_subnet(self, tracker):
-    (network, host_range, broadcast) = self.ctrl.get_subnet_info(tracker)
+    (network, broadcast, gateway, host_range, dns) = self.ctrl.get_subnet_info(tracker)
     print(self._wall +
-      "Network:\t{}\nHost range:\t{}\nBroadcast:\t{}\n".format(
+      "Network:\t{}\nBroadcast:\t{}\nGateway:\t{}\nHost range:\t{}\nDNS:\t\t{}\n".format(
       network,
+      broadcast,
+      gateway,
       host_range,
-      broadcast
+      dns
       ) +"\n\n" +
       self._show_hosts(tracker) +
       self._wall
