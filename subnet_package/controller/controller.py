@@ -71,14 +71,12 @@ class Controller(object):
   def get_subnet_info(self, tracker):
     return (
       tracker.network,
-      tracker.get_CIDR(),
-      tracker.get_networkAddr(),
-      tracker.get_firstHost(),
-      tracker.get_firstHost(),
-      self.get_hostRange(),
-      self.get_lastHost(),
-      self.get_broadcast()
+      tracker.get_hostRange(),
+      tracker.get_broadcast()
     )
+
+  def get_descript_map(self, tracker):
+    return tracker.descript_map
 
   def assign_ip(self, tracker, descript):
     if not self.get_hosts_dhcp_avail(tracker):

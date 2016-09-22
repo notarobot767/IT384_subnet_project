@@ -5,6 +5,8 @@ class Subnet_DB(object):
   def __init__(self):
     self.subnets = dict()
     self.subnets_lst = list()
+    #should just use list
+    #add comparison for equals and greater than for sorting and if same subnet
 
   def add_new_subnet(self, network_str):
     self.subnets[network_str] = IP_tracker(network_str)

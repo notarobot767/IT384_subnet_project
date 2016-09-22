@@ -1,10 +1,11 @@
+import ipaddress
 from ..controller.controller import Controller
 
 class Text_GUI(object):
   def __init__(self, controller):
     self.ctrl = controller
     self._wall_length = 40
-    self._wall = "\n" + "=" * self._wall_length + "\n"
+    self._wall = "=" * self._wall_length + "\n"
 
   def _pound_word(self, word):
     return "{0}\n#{1}#\n{0}".format("#"*(len(word)+2), word)
@@ -74,43 +75,46 @@ class Text_GUI(object):
 
   #subnet menu
   ########################################################
-  def show_hosts_assigned(self):
+  def _show_hosts_assigned(self, tracker):
     print_str = "Assigned DHCP host IPs:\n"
-    hosts_dhcp_unavail = self.ctrl.get_hosts_dhcp_unavail()
+    hosts_dhcp_unavail = self.ctrl.get_hosts_dhcp_unavail(tracker)
     if not hosts_dhcp_unavail:
-      my_str += "None"
+      print_str += "None\n"
     else:
-      descript_map = self.ctrl.get_descript_map()
+      descript_map = self.ctrl.get_descript_map(tracker)
       for ip in sorted(hosts_dhcp_unavail,
           key=lambda x: (ipaddress.ip_address(x))):
-        descript = 
-        print_str += "{}\t- {}\n".format(ip, descript)
-    return my_str.lstrip()
+        print_str += "{}\t- {}\n".format(ip, descript_map[ip])
+    return print_str
+
+  def _show_hosts_unassigned(self, tracker):
+    print_str = "Assigned DHCP host IPs:\n"
+    hosts_dhcp_avail = self.ctrl.get_hosts_dhcp_avail(tracker)
+    if not hosts_dhcp_avail:
+      print_str += "None\n"
+    else:
+      for ip in sorted(hosts_dhcp_avail,
+          key=lambda x: (ipaddress.ip_address(x))):
+        print_str += "{}\t- unassinged\n".format(ip)
+    return print_str
 
   def _show_hosts(self, tracker):
-    return self.show_hosts_assigned(tracker) + "\n" +
-      self.show_host_dhcp_avail(tracker)
+    return self._show_hosts_assigned(tracker) + "\n" + \
+      self._show_hosts_unassigned(tracker)
 
   def _show_subnet(self, tracker):
-    subnet_info = self.ctrl.get_subnet_info(tracker)
-    print(_wall +
-      "IP: {}\nCIDR: {}\nNetwork Address: {}\nFirst usable: {}\n".format(
-      tracker[0],
-      tracker[1],
-      tracker[2],
-      tracker[3],
-      tracker[4]
-      ) +
-      "Host addresses: {}\nLast usable: {}\nBroadcast Address: {}".format(
-      tracker[5],
-      tracker[6],
-      tracker[7]
-      ) + "\n\n" +
-      self._show_hosts() +
-      _wall
+    (network, host_range, broadcast) = self.ctrl.get_subnet_info(tracker)
+    print(self._wall +
+      "Network:\t{}\nHost range:\t{}\nBroadcast:\t{}\n".format(
+      network,
+      host_range,
+      broadcast
+      ) +"\n\n" +
+      self._show_hosts(tracker) +
+      self._wall
       )
 
-  def assign_ip(self, tracker):
+  def _assign_ip(self, tracker):
     descript = input("Enter a description for this host: ").strip()
     ip = self.ctrl.assign_ip(tracker, descript)
     if ip != None:
@@ -138,11 +142,11 @@ class Text_GUI(object):
       choice = self._get_choice(); print()
 
       if choice == "1":
-        self.assign_ip(tracker)
+        self._assign_ip(tracker)
       elif choice == "2":
         pass
       elif choice == "3":
-        self._show_subnet()
+        self._show_subnet(tracker)
       elif choice == "4":
         break
       else:
