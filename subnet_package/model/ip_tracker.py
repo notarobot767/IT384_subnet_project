@@ -2,6 +2,7 @@ import ipaddress
 
 class IP_tracker(object):
   def __init__(self, net_str):
+    self._dns = "8.8.8.8"
     self.network = ipaddress.IPv4Network(net_str)
     self.host_dhcp_avail = set([str(x) for x in self.network.hosts()])
     self.host_dhcp_unavail = set()
