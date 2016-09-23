@@ -10,6 +10,14 @@ class IP_tracker(object):
     self.descript_map = dict()
     self._set_gateway(self.get_lastHost())
 
+  def __cmp__(self, other):
+    if self.network < other.network:
+      return -1
+    elif self.network > other.network:
+      return 1
+    else:
+      return 0
+
   def _set_gateway(self, ip):
     self.assign_ip("Default Gateway", ip)
 
