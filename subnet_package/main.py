@@ -11,10 +11,16 @@ def main():
 
     print(misc.welcome_banner() + "\n")
     #view.text_gui._run_subnet_menu()
-    ctrl.add_new_subnet("172.16.0.0/29")
-    ctrl.add_new_subnet("172.16.0.0/28")
-    ctrl.add_new_subnet("127.16.0.0/28")
-    ctrl.add_new_subnet("10.16.0.0/28")
+
+    for subnet in [
+      "172.16.0.0/29",
+      "172.16.0.0/28",
+      "172.16.0.0/28",
+      "10.16.0.0/28"
+    ]:
+      ctrl.add_new_subnet(subnet)
+
+
     '''
     print(ctrl.get_subnets_lst())
     ctrl.assign_ip(ctrl.get_tracker(ctrl.get_subnets_lst()[0]), "test_ip")

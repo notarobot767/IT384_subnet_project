@@ -86,3 +86,14 @@ class Controller(object):
     else:
       return tracker.assign_ip(descript)
 
+  def remove_ip(self, tracker, ip):
+    if ip in tracker._dhcp_reserved:
+      print("IP {} is a reserved address!".format(ip))
+    elif ip in tracker._dhcp_avail:
+      print("IP {} has yet to be assigned!".format(ip))
+    elif ip in tracker.host_dhcp_unavail:
+      tracker.remove_ip(ip)
+      print("IP {} has been successfully removed!".format(ip))
+    else:
+      print("Cannot remove IP {} from subnet {}".format(ip, tracker.network))
+

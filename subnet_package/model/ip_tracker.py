@@ -58,24 +58,7 @@ class IP_tracker(object):
     self.descript_map[ip] = descript
     return ip
 
-  def removeIP_manual(self, ip):
-    self.host_unavail.remove(ip)
-    self.host_avail.add(ip)
+  def remove_ip(self, ip):
+    self.host_dhcp_unavail.remove(ip)
+    self.host_dhcp_avail.add(ip)
     del self.descript_map[ip]
-
-  def removeIP(self):
-    if not self.host_unavail:
-      print("Assigned IPs:\nNone\n")
-    else:
-      print(self.show_hosts_unavail(False))
-      choice = input("Enter the description of the IP you'd like to unassign: ").strip()
-      if choice == "Default Gateway":
-        print("Cannot unassign that!\n")
-      elif choice not in self.descript_map.values():
-        print("Host not found!\n")
-      else:
-        for ip, descript in self.descript_map.items():
-          if descript == choice:
-            self.removeIP_manual(ip)
-            print("Device successfully unassigned!\n")
-            break
