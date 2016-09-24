@@ -89,17 +89,6 @@ class Text_GUI(object):
         print_str += "{}\t- {}\n".format(ip, descript_map[ip])
     return print_str
 
-  def _show_hosts_unassigned(self, tracker):
-    print_str = "Unassigned DHCP host IPs:\n"
-    hosts_dhcp_avail = self.ctrl.get_hosts_dhcp_avail(tracker)
-    if not hosts_dhcp_avail:
-      print_str += "None\n"
-    else:
-      for ip in sorted(hosts_dhcp_avail,
-          key=lambda x: (ipaddress.ip_address(x))):
-        print_str += "{}\t- unassinged\n".format(ip)
-    return print_str
-
   def _show_hosts_reserved(self, tracker):
     print_str = "Reserved DHCP host IPs:\n"
     hosts_dhcp_reserved = self.ctrl.get_hosts_dhcp_reserved(tracker)
@@ -112,11 +101,8 @@ class Text_GUI(object):
         print_str += "{}\t- {}\n".format(ip, descript_map[ip])
     return print_str
 
-
-
   def _show_hosts(self, tracker):
     return self._show_hosts_assigned(tracker) + "\n" + \
-      self._show_hosts_unassigned(tracker) + "\n" + \
       self._show_hosts_reserved(tracker)
 
   def _show_subnet(self, tracker):
@@ -133,25 +119,26 @@ class Text_GUI(object):
       self._wall
       )
 
+  def _show_device_info(self, tracker, ip):
+    (mask, gateway, dns) = self.ctrl.get_device_info(tracker)
+    print(
+      self._wall +
+      "IP:\t\t{}\nSubnet Mask:\t{}\n".format(
+        ip,
+        mask
+      ) +
+      "Gateway:\t{}\nDNS:\t\t{}\n".format(
+        gateway,
+        dns
+      ) +
+      self._wall
+    )
+
   def _assign_ip(self, tracker):
-    if not self.ctrl.get_hosts_dhcp_avail(tracker):
-      print("No host availble to assign!")
-    else:
-      descript = input("Enter a description for this host: ").strip()
-      ip = self.ctrl.assign_ip(tracker, descript)
-      if ip != None:
-        device_info = self.ctrl.get_device_info(tracker)
-        print_str = self._wall
-        print_str += "IP\t\t\t: {}\nSubnet Mask\t\t: {}\n".format(
-          ip,
-          device_info[0]
-          )
-        print_str += "Default Gateway\t\t: {}\nDNS:\t\t\t: {}\n".format(
-          device_info[1],
-          device_info[2]
-          )
-        print_str += self._wall
-    print(print_str)
+    descript = input("Enter a description for this host: ").strip()
+    ip = self.ctrl.assign_ip(tracker, descript)
+    if ip != None:
+      self._show_device_info(tracker, ip)
 
   def _remove_ip(self, tracker):
     if self.ctrl.get_hosts_dhcp_unavail(tracker):

@@ -52,9 +52,6 @@ class Controller(object):
   def get_tracker(self, subnet):
     return self._subnet_db.subnets[subnet]
 
-  def get_hosts_dhcp_avail(self, tracker):
-    return tracker.host_dhcp_avail
-
   def get_hosts_dhcp_unavail(self, tracker):
     return tracker.host_dhcp_unavail
 
@@ -72,7 +69,7 @@ class Controller(object):
     return (
       tracker.network,
       tracker.get_broadcast(),
-      tracker.get_broadcast(), #gateway
+      tracker.get_defaultGateway(),
       tracker.get_hostRange(),
       tracker._dns
     )
@@ -85,13 +82,19 @@ class Controller(object):
       if host_name == name:
         return ip
 
+  def is_address_avail(self, tracker):
+    if tracker.host_dhcp_avail:
+      return True
+    else:
+      return False
+
   def assign_ip(self, tracker, descript):
-    if not self.get_hosts_dhcp_avail:
-      print("No hosts available to assign")
+    if not self.is_address_avail:
+      print("No hosts available to assign!\n")
     elif not descript:
-      print("Host name cannot be empty!")
-    elif not self.get_hosts_dhcp_avail(tracker):
-      print("No host IP addresses in this subnet are available!")
+      print("Host name cannot be empty!\n")
+    elif descript in self.get_descript_map(tracker).values():
+      print("Host '{}' already exists!\n".format(descript))
     else:
       return tracker.assign_ip(descript)
 
