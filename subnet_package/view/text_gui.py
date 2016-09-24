@@ -1,5 +1,6 @@
 import ipaddress
 from ..controller.controller import Controller
+from ..misc import misc
 
 class Text_GUI(object):
   def __init__(self, controller):
@@ -69,6 +70,7 @@ class Text_GUI(object):
       elif choice == "3":
         self.delete_subnet()
       elif choice == "4":
+        print(misc.exit_string())
         break
       else:
         self._print_invalid()
@@ -132,21 +134,35 @@ class Text_GUI(object):
       )
 
   def _assign_ip(self, tracker):
-    descript = input("Enter a description for this host: ").strip()
-    ip = self.ctrl.assign_ip(tracker, descript)
-    if ip != None:
-      device_info = self.ctrl.get_device_info(tracker)
-      print_str = self._wall
-      print_str += "IP\t\t\t: {}\nSubnet Mask\t\t: {}\n".format(
-        ip,
-        device_info[0]
-        )
-      print_str += "Default Gateway\t\t: {}\nDNS:\t\t\t: {}\n".format(
-        device_info[1],
-        device_info[2]
-        )
-      print_str += self._wall
+    if not self.ctrl.get_hosts_dhcp_avail(tracker):
+      print("No host availble to assign!")
+    else:
+      descript = input("Enter a description for this host: ").strip()
+      ip = self.ctrl.assign_ip(tracker, descript)
+      if ip != None:
+        device_info = self.ctrl.get_device_info(tracker)
+        print_str = self._wall
+        print_str += "IP\t\t\t: {}\nSubnet Mask\t\t: {}\n".format(
+          ip,
+          device_info[0]
+          )
+        print_str += "Default Gateway\t\t: {}\nDNS:\t\t\t: {}\n".format(
+          device_info[1],
+          device_info[2]
+          )
+        print_str += self._wall
     print(print_str)
+
+  def _remove_ip(self, tracker):
+    if self.ctrl.get_hosts_dhcp_unavail(tracker):
+      print(self._show_hosts_assigned(tracker))
+      host_name = input("Enter host name of device to be unassigned: ").strip()
+      self.ctrl.remove_ip(tracker, host_name)
+    else:
+      print("No hosts to remove!")
+    print()
+
+
 
   def _run_subnet_menu(self, tracker):
     while True:
@@ -162,7 +178,7 @@ class Text_GUI(object):
       if choice == "1":
         self._assign_ip(tracker)
       elif choice == "2":
-        pass
+        self._remove_ip(tracker)
       elif choice == "3":
         self._show_subnet(tracker)
       elif choice == "4":

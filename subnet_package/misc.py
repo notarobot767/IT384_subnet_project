@@ -3,12 +3,21 @@ import random
 class Misc(object):
   def welcome_banner(self):
     greet_lst = [
-      "IT384: Project 1",
+      "Project 1 or whatever - IT384",
       "Welcome to the NHK! - IT384",
-      "ASCII art makes the code run faster, right? - IT384"
-      "MAJ Hutchison is Cool! - IT384"
+      "ASCII art makes the code run faster, right? - IT384",
+      "MAJ Hutchison is not a softie! - IT384",
+      "The files are in the computer. - IT384"
     ]
     return random.choice(greet_lst)
+  
+  def exit_string(self):
+    exit_lst = [
+      "Break, Break, Break! - FM24-19",
+      "I'm done like a potato in the oven!",
+      "What happened? Did you see an evil bit?... (RFC 3514)"
+    ]
+    return random.choice(exit_lst)
 
   def cut_sling_load(self):
     control_c_lst = [
@@ -77,10 +86,7 @@ class Misc(object):
       "      \\_| ||_                     //~;~~~~~~~~~ \n" +
       "          `\\_|                   (,~~ \n" +
       "                                  \\~\\ \n" +
-      "                                   ~~\n",
-      "Break, Break, Break! - FM24-19",
-      "I'm done like a potato in the oven!",
-      "What happened? Did you see an evil bit?... (RFC 3514)"
+      "                                   ~~\n"
     ]
     return "\n\n" + random.choice(control_c_lst)
 misc = Misc()

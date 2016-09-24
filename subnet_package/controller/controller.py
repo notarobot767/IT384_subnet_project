@@ -80,20 +80,32 @@ class Controller(object):
   def get_descript_map(self, tracker):
     return tracker.descript_map
 
+  def get_ip_from_name(self, tracker, host_name):
+    for ip, name in self.get_descript_map(tracker).items():
+      if host_name == name:
+        return ip
+
   def assign_ip(self, tracker, descript):
-    if not self.get_hosts_dhcp_avail(tracker):
+    if not self.get_hosts_dhcp_avail:
+      print("No hosts available to assign")
+    elif not descript:
+      print("Host name cannot be empty!")
+    elif not self.get_hosts_dhcp_avail(tracker):
       print("No host IP addresses in this subnet are available!")
     else:
       return tracker.assign_ip(descript)
 
-  def remove_ip(self, tracker, ip):
-    if ip in tracker._dhcp_reserved:
-      print("IP {} is a reserved address!".format(ip))
-    elif ip in tracker._dhcp_avail:
-      print("IP {} has yet to be assigned!".format(ip))
-    elif ip in tracker.host_dhcp_unavail:
-      tracker.remove_ip(ip)
-      print("IP {} has been successfully removed!".format(ip))
+  def remove_ip(self, tracker, host_name):
+    if not host_name:
+      print("Empty host name is invalid!")
     else:
-      print("Cannot remove IP {} from subnet {}".format(ip, tracker.network))
-
+      ip = self.get_ip_from_name(tracker, host_name)
+      if ip == None:
+        print("Host '{}' could not be found!".format(host_name))
+      else:
+        if ip in tracker.host_dhcp_reserved:
+          print("Host '{}'' is a reserved address!".format(host_name))
+        else:
+          tracker.remove_ip(ip)
+          print("Host '{}' successfully unassigned!".format(host_name))
+    print()

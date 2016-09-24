@@ -2,13 +2,13 @@ import ipaddress
 
 class IP_tracker(object):
   def __init__(self, net_str):
-    self._dns = "8.8.8.8"
-    self.network = ipaddress.IPv4Network(net_str)
+    self.network = ipaddress.ip_network(net_str)
     self.host_dhcp_avail = set([str(x) for x in self.network.hosts()])
     self.host_dhcp_unavail = set()
     self.host_dhcp_reserved = set()
     self.descript_map = dict()
     self._set_gateway(self.get_lastHost())
+    self._dns = self.get_dns()
 
   def __cmp__(self, other):
     if self.network < other.network:
@@ -21,8 +21,16 @@ class IP_tracker(object):
   def _set_gateway(self, ip):
     self.assign_ip("Default Gateway", ip)
 
+  def get_dns(self):
+    if self.get_version() == 4:
+      return "8.8.8.8\t8.8.4.4"
+    return "2001:4860:4860::8888"
+
+  def get_version(self):
+    return self.network.version
+
   def get_CIDR(self):
-    return "/" + str(self.network).split("/")[1]
+    return self.network.prefixlen
 
   def get_networkAddr(self):
     return str(self.network.network_address)
@@ -47,7 +55,7 @@ class IP_tracker(object):
     return self.get_lastHost()
 
   def get_hostRange(self):
-    return self.get_firstHost() + "-" + self.get_lastHost().split(".")[3]   
+    return self.get_firstHost() + "-" + self.get_lastHost()  
 
   def assign_ip(self, descript, ip=None):
     if ip == None:
@@ -56,6 +64,8 @@ class IP_tracker(object):
     else:
       self.host_dhcp_reserved.add(ip)
     self.descript_map[ip] = descript
+    if ip in self.host_dhcp_avail:
+      self.host_dhcp_avail.remove(ip)
     return ip
 
   def remove_ip(self, ip):
