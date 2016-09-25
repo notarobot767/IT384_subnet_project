@@ -1,0 +1,4 @@
+Planning,30
+Research,33
+Operations,120
+Intel, 4
