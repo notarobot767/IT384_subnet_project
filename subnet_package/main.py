@@ -12,7 +12,9 @@ def main():
     for subnet in [
       "172.16.0.0/29",
       "172.16.0.0/28",
-      "10.16.0.0/28"
+      "10.16.0.0/28",
+      "10.0.0.0/8",
+      "2001:dead:beef::/64"
     ]:
       ctrl.add_new_subnet(subnet, True)
 

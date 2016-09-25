@@ -20,11 +20,13 @@ class Controller(object):
     try:
       network = ipaddress.ip_network(net_str)
       cidr = network.prefixlen
-      if cidr >= 31:
-        print("CIDR mask must be between greater then 31!\n")
-        return (False, False)
+      if network.version == 4 and cidr > 30:
+        print("CIDR mask must be between less then 31 for IPv4!\n")
+      elif network.version == 6 and cidr > 126:
+        print("CIDR mask must be between less than 127 for IPv6!\n")
       else:
         return (True, network)
+      return (False, False)
     except ValueError:
       print("Not a vaild network!\n<usage> [IPv4 network address]/[CIDR]\n")
       return (False, False)

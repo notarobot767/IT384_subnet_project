@@ -5,7 +5,7 @@ from ..misc import misc
 class Text_GUI(object):
   def __init__(self, controller):
     self.ctrl = controller
-    self._wall_length = 40
+    self._wall_length = 72
     self._wall = "=" * self._wall_length + "\n"
 
   def _pound_word(self, word):
@@ -39,7 +39,7 @@ class Text_GUI(object):
       elif choice.isdigit() and int(choice) > 0 and int(choice) < i:
 
         self._run_subnet_menu(self.ctrl.get_tracker(
-          self.ctrl.get_subnets_lst()[0]))
+          self.ctrl.get_subnets_lst()[int(choice)-1]))
       else:
         self._print_invalid()
 
@@ -77,29 +77,21 @@ class Text_GUI(object):
 
   #subnet menu
   ########################################################
-  def _show_hosts_assigned(self, tracker):
+  def __show_hosts_pool(self, tracker, pool):
     print_str = "Assigned DHCP host IPs:\n"
-    hosts_dhcp_unavail = self.ctrl.get_hosts_dhcp_unavail(tracker)
-    if not hosts_dhcp_unavail:
+    if not pool:
       print_str += "None\n"
     else:
       descript_map = self.ctrl.get_descript_map(tracker)
-      for ip in sorted(hosts_dhcp_unavail,
-          key=lambda x: (ipaddress.ip_address(x))):
-        print_str += "{}\t- {}\n".format(ip, descript_map[ip])
+      for ip in pool:
+        print_str += "{:40}- {}\n".format(str(ip), str(descript_map[ip]))
     return print_str
 
+  def _show_hosts_assigned(self, tracker):
+    return self.__show_hosts_pool(tracker, self.ctrl.get_hosts_dhcp_unavail(tracker))
+
   def _show_hosts_reserved(self, tracker):
-    print_str = "Reserved DHCP host IPs:\n"
-    hosts_dhcp_reserved = self.ctrl.get_hosts_dhcp_reserved(tracker)
-    if not hosts_dhcp_reserved:
-      print_str += "None\n"
-    else:
-      descript_map = self.ctrl.get_descript_map(tracker)
-      for ip in sorted(hosts_dhcp_reserved,
-          key=lambda x: (ipaddress.ip_address(x))):
-        print_str += "{}\t- {}\n".format(ip, descript_map[ip])
-    return print_str
+    return self.__show_hosts_pool(tracker, self.ctrl.get_hosts_dhcp_reserved(tracker))
 
   def _show_hosts(self, tracker):
     return self._show_hosts_assigned(tracker) + "\n" + \
@@ -148,8 +140,6 @@ class Text_GUI(object):
     else:
       print("No hosts to remove!")
     print()
-
-
 
   def _run_subnet_menu(self, tracker):
     while True:

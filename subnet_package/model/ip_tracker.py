@@ -28,7 +28,7 @@ class IP_tracker(object):
   def get_dns(self):
     if self.get_version() == 4:
       return "8.8.8.8  8.8.4.4"
-    return "2001:4860:4860::8888"
+    return "2001:4860:4860::8888  2001:4860:4860::8844"
 
   def get_version(self):
     return self.network.version
@@ -46,10 +46,10 @@ class IP_tracker(object):
     return str(self.network.broadcast_address)
 
   def get_firstHost(self):
-    return str(self.network[0])
+    return str(self.network[1])
 
   def get_lastHost(self):
-    return str(self.network[-1])
+    return str(self.network[-2])
 
   def get_defaultGateway(self):
     return self.get_lastHost()
