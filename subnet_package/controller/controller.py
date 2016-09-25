@@ -17,23 +17,19 @@ class Controller(object):
 
   def isValidNetwork(self, net_str):
     net_str = net_str.strip()
-    if ":" in net_str:
-      print("Only IPv4 networks only!\n")
-      return (False, False)
-    else:
-      try:
-        network = ipaddress.IPv4Network(net_str)
-        cidr = int(net_str.split("/")[1])
-        if cidr > 30 or cidr < 24:
-          print("CIDR mask must be between 24 and 30 inclusive!\n")
-          return (False, False)
-        else:
-          return (True, network)
-      except ValueError:
-        print("Not a vaild network!\n<usage> [IPv4 network address]/[CIDR]\n")
+    try:
+      network = ipaddress.ip_network(net_str)
+      cidr = network.prefixlen
+      if cidr >= 31:
+        print("CIDR mask must be between greater then 31!\n")
         return (False, False)
+      else:
+        return (True, network)
+    except ValueError:
+      print("Not a vaild network!\n<usage> [IPv4 network address]/[CIDR]\n")
+      return (False, False)
 
-  def add_new_subnet(self, net_str):
+  def add_new_subnet(self, net_str, verbose=False):
     (isValid, net) = self.isValidNetwork(net_str)
     if isValid:
       net_str = str(net)
@@ -41,10 +37,16 @@ class Controller(object):
         print("Network '{}' already exists!\n".format(net_str))
       else:
         self._subnet_db.add_new_subnet(net_str)
-        print("Network '{}' successfully added!\n".format(net_str))
+        if verbose:
+          print("Network '{}' successfully added!\n".format(net_str))
+        return True
+    return False
+        
     
-  def delete_subnet(self):
-    print("method has been depreciated!\n")
+  def delete_subnet(self, verbose=False):
+    if verbose:
+      print("method has been depreciated!\n")
+    return False
     #self._subnet_db.delete_subnet(net_str)
 
   #ip_tracker
@@ -98,7 +100,7 @@ class Controller(object):
     else:
       return tracker.assign_ip(descript)
 
-  def remove_ip(self, tracker, host_name):
+  def remove_ip(self, tracker, host_name, verbose=False):
     if not host_name:
       print("Empty host name is invalid!")
     else:
@@ -109,6 +111,8 @@ class Controller(object):
         if ip in tracker.host_dhcp_reserved:
           print("Host '{}'' is a reserved address!".format(host_name))
         else:
-          tracker.remove_ip(ip)
-          print("Host '{}' successfully unassigned!".format(host_name))
+          if tracker.remove_ip(ip):
+            print("Host '{}' successfully unassigned!".format(host_name))
+            return True
     print()
+    return False

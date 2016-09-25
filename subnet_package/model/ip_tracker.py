@@ -74,3 +74,4 @@ class IP_tracker(object):
     self.host_dhcp_avail = itertools.chain([ip], self.host_dhcp_avail)
       #http://stackoverflow.com/questions/571850/adding-elements-to-python-generators
     del self.descript_map[ip]
+    return True

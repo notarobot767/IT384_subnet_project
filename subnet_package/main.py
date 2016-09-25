@@ -14,7 +14,7 @@ def main():
       "172.16.0.0/28",
       "10.16.0.0/28"
     ]:
-      ctrl.add_new_subnet(subnet)
+      ctrl.add_new_subnet(subnet, True)
 
     print(misc.welcome_banner())
     view.text_gui.run()

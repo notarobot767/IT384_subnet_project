@@ -45,10 +45,10 @@ class Text_GUI(object):
 
   def add_new_subnet(self):
     net_str = input("Enter your subnet followed by CIDR: ")
-    self.ctrl.add_new_subnet(net_str)
+    self.ctrl.add_new_subnet(net_str, True)
 
   def delete_subnet(self):
-    self.ctrl.delete_subnet()
+    self.ctrl.delete_subnet(True)
 
   #main menu
   ########################################################
@@ -144,7 +144,7 @@ class Text_GUI(object):
     if self.ctrl.get_hosts_dhcp_unavail(tracker):
       print(self._show_hosts_assigned(tracker))
       host_name = input("Enter host name of device to be unassigned: ").strip()
-      self.ctrl.remove_ip(tracker, host_name)
+      self.ctrl.remove_ip(tracker, host_name, True)
     else:
       print("No hosts to remove!")
     print()
