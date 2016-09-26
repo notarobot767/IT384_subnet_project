@@ -3,7 +3,7 @@ from .controller.controller import Controller
 from .view.view import View
 from .misc import misc
 
-def main():
+def main(argv):
   try:
     _mod = Model()
     ctrl = Controller(_mod)
@@ -16,10 +16,10 @@ def main():
       "10.0.0.0/8",
       "2001:dead:beef::/64"
     ]:
-      ctrl.add_new_subnet(subnet, True)
+      ctrl.add_new_subnet(subnet)
 
     print(misc.welcome_banner())
-    view.text_gui.run()
+    #view.text_gui.run()
 
   except KeyboardInterrupt:
     print(misc.cut_sling_load())
