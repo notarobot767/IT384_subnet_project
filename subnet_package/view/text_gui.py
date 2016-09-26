@@ -77,8 +77,8 @@ class Text_GUI(object):
 
   #subnet menu
   ########################################################
-  def __show_hosts_pool(self, tracker, pool):
-    print_str = "Assigned DHCP host IPs:\n"
+  def __show_hosts_pool(self, tracker, pool, msg):
+    print_str = msg + "\n"
     if not pool:
       print_str += "None\n"
     else:
@@ -88,10 +88,14 @@ class Text_GUI(object):
     return print_str
 
   def _show_hosts_assigned(self, tracker):
-    return self.__show_hosts_pool(tracker, self.ctrl.get_hosts_dhcp_unavail(tracker))
+    return self.__show_hosts_pool(tracker,
+      self.ctrl.get_hosts_dhcp_unavail(tracker),
+      "Assigned DHCP host IPs")
 
   def _show_hosts_reserved(self, tracker):
-    return self.__show_hosts_pool(tracker, self.ctrl.get_hosts_dhcp_reserved(tracker))
+    return self.__show_hosts_pool(tracker,
+      self.ctrl.get_hosts_dhcp_reserved(tracker),
+      "Reserved DHCP host IPs")
 
   def _show_hosts(self, tracker):
     return self._show_hosts_assigned(tracker) + "\n" + \

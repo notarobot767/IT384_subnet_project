@@ -40,7 +40,7 @@ def get_requirements(file_name):
   return sort_my_dic(require_dic)
 
 def get_network(net_str):
-  return -1
+  return "172.16.0.0/16"
 
 def get_parser():
   parser = argparse.ArgumentParser(
@@ -61,6 +61,7 @@ def get_parser():
     argv = None
 
   if argv != None:
+    print("Requrements to add:\n{}\n".format(argv))
     main(argv)
 
   
