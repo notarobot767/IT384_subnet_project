@@ -15,34 +15,14 @@ class Controller(object):
   def get_subnets_lst(self):
     return self._subnet_db.subnets_lst
 
-  def isValidNetwork(self, net_str):
-    net_str = net_str.strip()
+  def add_new_subnet(self, hosts, name, verbose=False):
     try:
-      network = ipaddress.ip_network(net_str)
-      cidr = network.prefixlen
-      if network.version == 4 and cidr > 30:
-        print("CIDR mask must be between less then 31 for IPv4!\n")
-      elif network.version == 6 and cidr > 126:
-        print("CIDR mask must be between less than 127 for IPv6!\n")
-      else:
-        return (True, network)
-      return (False, False)
-    except ValueError:
-      print("Not a vaild network!\n<usage> [IPv4 network address]/[CIDR]\n")
-      return (False, False)
+      hosts = int(hosts)
+    except:
+      print("Hosts must be an integer!")
+      return False
 
-  def add_new_subnet(self, net_str, verbose=False):
-    (isValid, net) = self.isValidNetwork(net_str)
-    if isValid:
-      net_str = str(net)
-      if net_str in self._subnet_db.subnets:
-        print("Network '{}' already exists!\n".format(net_str))
-      else:
-        self._subnet_db.add_new_subnet(net_str)
-        if verbose:
-          print("Network '{}' successfully added!\n".format(net_str))
-        return True
-    return False
+    return self._subnet_db.add_new_subnet(hosts, name)
         
     
   def delete_subnet(self, verbose=False):

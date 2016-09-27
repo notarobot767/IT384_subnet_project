@@ -44,8 +44,9 @@ class Text_GUI(object):
         self._print_invalid()
 
   def add_new_subnet(self):
-    net_str = input("Enter your subnet followed by CIDR: ")
-    self.ctrl.add_new_subnet(net_str, True)
+    print("Not yet implemted!\n")
+    #net_str = input("Enter your subnet followed by CIDR: ")
+    #self.ctrl.add_new_subnet(net_str, True)
 
   def delete_subnet(self):
     self.ctrl.delete_subnet(True)

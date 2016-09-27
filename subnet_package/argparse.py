@@ -41,7 +41,9 @@ def get_requirements(file_name):
   return sort_my_dic(require_dic)
 
 def get_network(net_str):
-  return list(ipaddress.ip_network(net_str))
+  lst = list()
+  lst.append(ipaddress.ip_network(net_str))
+  return lst
 
 def get_parser():
   parser = argparse.ArgumentParser(
