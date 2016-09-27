@@ -4,6 +4,7 @@ from .ip_tracker import IP_tracker
 class Subnet_DB(object):
   def __init__(self, argv):
     self.address_space = argv
+    self.version = self.address_space[0].version
     self.subnets = dict() #network string -> IP_tracker
     self.subnets_lst = list() #list of network subnets using ipaddress.IPv4Network()
     #takes more memory but will only have to sort once when adding/deleting
@@ -15,7 +16,11 @@ class Subnet_DB(object):
 
   def add_new_subnet(self, hosts, name):
     holder = list()
-    (cidr, block) = self.get_cidr_block_from_hosts(hosts)
+    (cidr, block) = (None, None)
+    if self.version == 4:
+      (cidr, block) = self.get_cidr_block_from_hosts(hosts)
+    else:
+      (cidr, block) = (64, self.get_block_size_from_cidr(64))
 
     def _get_split_addresses(start, stop, cidr):
       if start == stop:
@@ -23,7 +28,6 @@ class Subnet_DB(object):
       else:
         address = ipaddress.ip_network("{}/{}".format(start, cidr))
         holder.append(address)
-        print(address)
         return _get_split_addresses(start+self.get_block_size_from_cidr(cidr),
           stop, cidr-1)
 
@@ -67,13 +71,17 @@ class Subnet_DB(object):
     else:
       return self.get_cidr_block_from_hosts(hosts, pow_2*2, base+1)
 
-  def get_cidr_from_block(self, block, pow_2=4, cidr=30):
+  def get_cidr_from_block(self, block, pow_2=4, host_bits=2):
     if pow_2 == block:
-      return cidr
+      if self.version == 4:
+        return 32-host_bits
+      return 128-host_bits
     else:
-      return self.get_cidr_from_block(block, pow_2*2, cidr-1)
+      return self.get_cidr_from_block(block, pow_2*2, host_bits+1)
 
   def get_block_size_from_cidr(self, cidr):
-    return 2**(32-cidr)
+    if self.version == 4:
+      return 2**(32-cidr)
+    return 2**(128-cidr)
 
 
