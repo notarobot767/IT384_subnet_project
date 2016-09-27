@@ -4,7 +4,7 @@ from .view.view import View
 from .misc import misc
 
 def main(argv):
-  _mod = Model()
+  _mod = Model(argv)
   ctrl = Controller(_mod)
   view = View(ctrl)
 

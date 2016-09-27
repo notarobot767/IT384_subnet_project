@@ -1,5 +1,6 @@
 import argparse
 import sys
+import ipaddress
 from .main import main
 
 def get_requirements(file_name):
@@ -40,7 +41,7 @@ def get_requirements(file_name):
   return sort_my_dic(require_dic)
 
 def get_network(net_str):
-  return "172.16.0.0/16"
+  return list(ipaddress.ip_network(net_str))
 
 def get_parser():
   parser = argparse.ArgumentParser(
@@ -54,11 +55,14 @@ def get_parser():
   )
   args = parser.parse_args()
 
+  argv = None
   try:
     argv = (get_requirements(args.R), get_network(args.N))
   except FileNotFoundError:
     print("File '{}' could not be opened!".format(args.R))
     argv = None
+  except ValueError:
+    print("'{}' does not appear to be an IPv4 or IPv6 network".format(args.N))
 
   if argv != None:
     print("Requrements to add:\n{}\n".format(argv))
