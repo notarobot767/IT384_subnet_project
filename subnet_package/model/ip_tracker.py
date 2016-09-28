@@ -1,5 +1,4 @@
 import ipaddress, itertools
-#from .subnet import Subnet
 
 class IP_tracker(object):
   def __init__(self, subnet):
@@ -8,16 +7,7 @@ class IP_tracker(object):
     self.host_dhcp_unavail = list()
     self.host_dhcp_reserved = list()
     self.descript_map = dict()
-    self._set_gateway(self.get_lastHost())
-    self._dns = self.get_dns()
-
-  def __cmp__(self, other):
-    if self.network < other.network:
-      return -1
-    elif self.network > other.network:
-      return 1
-    else:
-      return 0
+    self._set_gateway(self.get_defaultGateway())
 
   def _set_gateway(self, ip):
     last_host = self.get_lastHost()
@@ -32,12 +22,6 @@ class IP_tracker(object):
 
   def get_version(self):
     return self.network.version
-
-  def get_CIDR(self):
-    return self.network.prefixlen
-
-  def get_networkAddr(self):
-    return str(self.network.network_address)
 
   def get_netmask(self):
     return str(self.network.netmask)

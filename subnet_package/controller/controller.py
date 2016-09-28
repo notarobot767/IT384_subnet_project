@@ -45,7 +45,7 @@ class Controller(object):
     return (
       tracker.get_netmask(),
       tracker.get_defaultGateway(),
-      tracker._dns
+      tracker.get_dns()
     )
 
   def get_subnet_info(self, tracker):
@@ -54,7 +54,7 @@ class Controller(object):
       tracker.get_broadcast(),
       tracker.get_defaultGateway(),
       tracker.get_hostRange(),
-      tracker._dns
+      tracker.get_dns()
     )
 
   def get_descript_map(self, tracker):

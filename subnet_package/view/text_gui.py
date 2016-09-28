@@ -85,7 +85,7 @@ class Text_GUI(object):
     else:
       descript_map = self.ctrl.get_descript_map(tracker)
       for ip in pool:
-        print_str += "{:40}- {}\n".format(ip, descript_map[ip])
+        print_str += "{:40}- {}\n".format(str(ip), str(descript_map[ip])) #why have to force strings?
     return print_str
 
   def _show_hosts_assigned(self, tracker):
