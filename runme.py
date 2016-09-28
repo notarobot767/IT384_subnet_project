@@ -35,7 +35,7 @@ focuses on a particular function.
 """
 
 # Imports ---------------------------------------------------------------------
-from subnet_package.argparse import get_parser
+from subnet_package.argparse import parse_args
 from subnet_package.misc import Misc
 
 # Class Definitions -----------------------------------------------------------
@@ -50,6 +50,6 @@ Well, here it is.
 """
 if __name__ == '__main__':
   try:
-    get_parser()
+    parse_args()
   except KeyboardInterrupt:
     Misc.cut_sling_load()

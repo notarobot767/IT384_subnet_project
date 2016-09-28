@@ -3,14 +3,14 @@ from .controller.controller import Controller
 from .view.view import View
 from .misc import Misc
 
-def main(argv):
-  (requirements, address_space) = argv
-  _mod = Model(address_space)
+def main(argc, argv):
+  _mod = Model(argv[0])
   ctrl = Controller(_mod)
   view = View(ctrl)
 
-  for name, hosts in requirements:
-    ctrl.add_new_subnet(hosts, name, True)
+  if(argc == 2):
+    for name, hosts in argv[1]:
+      ctrl.add_new_subnet(hosts, name, True)
 
   Misc.welcome_banner()
   view.text_gui.run()

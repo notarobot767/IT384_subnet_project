@@ -1,23 +1,25 @@
-import argparse
-import sys
-import ipaddress
+import argparse, sys, ipaddress
 from .main import main
+from .statics import Statics
+
+def get_network(net_str):
+  return [ipaddress.ip_network(net_str)]
+
+def ask_keep_going():
+  while True:
+    choice = input("Would you like to continue anyway? [y | n] ")
+    if choice == "y":
+      break
+    elif choice == "n":
+      sys.exit()
 
 def get_requirements(file_name):
   require_dic = dict()
 
-  def sort_my_dic(dic):
+  def sorted_dic(dic):
     return list(sorted(dic.items(), key=lambda x: (-x[1], x[0])))
 
-  def is_keep_going():
-    while True:
-      choice = input("Would you like to continue anyway? [y | n] ")
-      if choice == "y":
-        break
-      elif choice == "n":
-        sys.exit()
-
-  def parse_requirements(line):
+  def parse_require(line):
     line = line.split(",")
     isBad = True
     if len(line) == 2:
@@ -30,44 +32,40 @@ def get_requirements(file_name):
         require_dic[name] = int(size)
         isBad = False
     else:
-      print("line '{}' did not split right".fomat(line))
+      print("line '{}' did not split right".format(line))
     return isBad
 
-  with open(file_name, "r") as input_file:
-    for line in input_file:
-      if(parse_requirements(line)):
-        is_keep_going()
+  for line in Statics.read_file(file_name).split("\n"):
+    if parse_require(line):
+      ask_keep_going()
 
-  return sort_my_dic(require_dic)
+  return sorted_dic(require_dic)
 
-def get_network(net_str):
-  lst = list()
-  lst.append(ipaddress.ip_network(net_str))
-  return lst
-
-def get_parser():
+def parse_args():
   parser = argparse.ArgumentParser(
     description="Automated Subnet Calculator"
+  )
+  parser.add_argument("-r", type=str,
+    default=None, metavar='requirements',
+    help="path to requirements text document"
   )
   parser.add_argument("N", type=str,
     help="Allocated network block of IP space ex) 172.16.0.0/16"
   )
-  parser.add_argument("R", type=str,
-    help="Path to requirements text document"
-  )
   args = parser.parse_args()
+  argv = list()
 
-  argv = None
   try:
-    argv = (get_requirements(args.R), get_network(args.N))
-  except FileNotFoundError:
-    print("File '{}' could not be opened!".format(args.R))
-    argv = None
+    argv.append(get_network(args.N))
+    if True:
+      argv.append(get_requirements(args.r))
   except ValueError:
     print("'{}' does not appear to be an IPv4 or IPv6 network".format(args.N))
+    return -1
+  except FileNotFoundError:
+    print("File '{}' could not be opened!".format(args.R))
+    return -1
 
-  if argv != None:
-    print("Requrements to add:\n{}\n".format(argv))
-    main(argv)
-
+  print("Requrements to add:\n{}\n".format(argv)) #remove later
+  main(len(argv), argv)
   
