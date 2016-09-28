@@ -1,6 +1,6 @@
 import ipaddress
 from ..controller.controller import Controller
-from ..misc import misc
+from ..misc import Misc
 
 class Text_GUI(object):
   def __init__(self, controller):

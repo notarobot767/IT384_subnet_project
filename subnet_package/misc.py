@@ -1,26 +1,28 @@
 import random
 
-class Misc(object):
+class Miscellaneous(object):
+  def _print(self, lst):
+    print(random.choice(lst))
+
   def welcome_banner(self):
-    greet_lst = [
+    self._print([
       "Project 1 or whatever - IT384",
       "Welcome to the NHK! - IT384",
       "ASCII art makes the code run faster, right? - IT384",
       "MAJ Hutchison is not a softie! - IT384",
       "The files are in the computer. - IT384"
-    ]
-    return random.choice(greet_lst)
+    ])
   
-  def exit_string(self):
-    exit_lst = [
+  def exit_msg(self):
+    self._print([
       "Break, Break, Break! - FM24-19",
       "I'm done like a potato in the oven!",
-      "What happened? Did you see an evil bit?... (RFC 3514)"
-    ]
-    return random.choice(exit_lst)
+      "What happened? Did you see an evil bit?... (RFC 3514)",
+      "Can you hear me MAJ Tom?"
+    ])
 
   def cut_sling_load(self):
-    control_c_lst = [
+    self._print([
       "Cutting Sling Load - Air Assault!\n" + \
       "   ______.........--=T=--.........______\n" + \
       "      .             |:|\n" + \
@@ -87,6 +89,5 @@ class Misc(object):
       "          `\\_|                   (,~~ \n" +
       "                                  \\~\\ \n" +
       "                                   ~~\n"
-    ]
-    return "\n\n" + random.choice(control_c_lst)
-misc = Misc()
+    ])
+Misc = Miscellaneous()
