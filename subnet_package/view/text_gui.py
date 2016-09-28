@@ -22,8 +22,8 @@ class Text_GUI(object):
     print_str = self._pound_word("Subnets")
     print_str += "\nFound {} subnet(s):\n".format(len(subnets_lst))
     i = 1
-    for net_str in subnets_lst:
-      print_str += "[{}] - {}\n".format(i, net_str)
+    for subnet in subnets_lst:
+      print_str += "[{}] - {:15}-{}\n".format(i,subnet.name, subnet.network)
       i += 1
     print_str += "[{}] - Go back".format(i)
     return (i, print_str)
@@ -71,7 +71,7 @@ class Text_GUI(object):
       elif choice == "3":
         self.delete_subnet()
       elif choice == "4":
-        print(misc.exit_string())
+        Misc.exit_msg()
         break
       else:
         self._print_invalid()
@@ -85,7 +85,7 @@ class Text_GUI(object):
     else:
       descript_map = self.ctrl.get_descript_map(tracker)
       for ip in pool:
-        print_str += "{:40}- {}\n".format(str(ip), str(descript_map[ip]))
+        print_str += "{:40}- {}\n".format(ip, descript_map[ip])
     return print_str
 
   def _show_hosts_assigned(self, tracker):

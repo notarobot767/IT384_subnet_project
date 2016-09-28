@@ -21,7 +21,6 @@ class Controller(object):
     except:
       print("Hosts must be an integer!")
       return False
-
     return self._subnet_db.add_new_subnet(hosts, name)
         
     

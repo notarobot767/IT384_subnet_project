@@ -15,15 +15,15 @@ class Miscellaneous(object):
   
   def exit_msg(self):
     self._print([
-      "Break, Break, Break! - FM24-19",
-      "I'm done like a potato in the oven!",
-      "What happened? Did you see an evil bit?... (RFC 3514)",
-      "Can you hear me MAJ Tom?"
+      "\nBreak, Break, Break! - FM24-19",
+      "\nI'm done like a potato in the oven!",
+      "\nWhat happened? Did you see an evil bit?... (RFC 3514)",
+      "\nCan you hear me MAJ Tom?"
     ])
 
   def cut_sling_load(self):
     self._print([
-      "Cutting Sling Load - Air Assault!\n" + \
+      "\n\nCutting Sling Load - Air Assault!\n" + \
       "   ______.........--=T=--.........______\n" + \
       "      .             |:|\n" + \
       " :-. //           /\"\"\"\"\"\"-.\n" + \
@@ -32,7 +32,8 @@ class Miscellaneous(object):
       "  ': :'     `-.IT384_:._     '\"\"\"\" :\n" + \
       "   ::          '--=:____:.___....-\"\n" + \
       "                     O\"       O\"",
-      "                                                 :::\n" +
+      
+      "\n\n                                                 :::\n" +
       "                                             :: :::.\n" +
       "                       \\/,                    .:::::\n" +
       "           \\),          \\`-._                 :::888\n" +
@@ -63,7 +64,8 @@ class Miscellaneous(object):
       "                          |     \\\n" +
       "                          |      \__\n" +
       "                          |__",
-      "                             ,|\n" +
+      
+      "\n\n                             ,|\n" +
       "                           //|                              ,|\n" +
       "                         //,/                             -~ |\n" +
       "                       // / |                         _-~   /  ,\n" +

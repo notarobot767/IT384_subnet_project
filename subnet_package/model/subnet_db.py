@@ -1,52 +1,54 @@
 import ipaddress
+from .subnet import Subnet
 from .ip_tracker import IP_tracker
 
 class Subnet_DB(object):
-  def __init__(self, argv):
-    self.address_space = argv
+  def __init__(self, address_block):
+    self.address_space = address_block
     self.version = self.address_space[0].version
     self.subnets = dict() #network string -> IP_tracker
     self.subnets_lst = list() #list of network subnets using ipaddress.IPv4Network()
     #takes more memory but will only have to sort once when adding/deleting
 
-  def _add_new_subnet(self, subnet):
-    self.subnets[subnet] = IP_tracker(subnet)
-    self.subnets_lst.append(subnet)
-    self.subnets_lst = sorted(self.subnets_lst)
-
   def add_new_subnet(self, hosts, name):
     holder = list()
-    (cidr, block) = (None, None)
+
     if self.version == 4:
       (cidr, block) = self.get_cidr_block_from_hosts(hosts)
     else:
       (cidr, block) = (64, self.get_block_size_from_cidr(64))
 
-    def _get_split_addresses(start, stop, cidr):
+    def add(name, network):
+      subnet = Subnet(name, network)
+      self.subnets[subnet] = IP_tracker(subnet)
+      self.subnets_lst.append(subnet)
+      self.subnets_lst = sorted(self.subnets_lst,
+        key=lambda x: (x.network, x.name))
+
+    def get_split_addr(start, stop, cidr):
       if start == stop:
         return list() #sqeeze and sort address_space
       else:
-        address = ipaddress.ip_network("{}/{}".format(start, cidr))
-        holder.append(address)
-        return _get_split_addresses(start+self.get_block_size_from_cidr(cidr),
+        holder.append(ipaddress.ip_network("{}/{}".format(start, cidr)))
+        return get_split_addr(start+self.get_block_size_from_cidr(cidr),
           stop, cidr-1)
 
     while True:
       if not self.address_space:
-        print("There is no space for requirement '{}'".format(name))
+        print("There is no space for requirement '{}'!".format(name))
         break
       else:
         avail_address = self.address_space.pop()
         avail_block = self.get_block_size_from_cidr(avail_address.prefixlen)
 
         if avail_block == block:
-          self._add_new_subnet(avail_address)
+          add(name, avail_address)
           break
         elif avail_block > block:
-          new_subnet = ipaddress.ip_network("{}/{}".format(avail_address[0], \
+          new_subnet = ipaddress.ip_network("{}/{}".format(avail_address[0],
             self.get_cidr_from_block(block)))
-          self._add_new_subnet(new_subnet)
-          _get_split_addresses(avail_address[0]+block, \
+          add(name, new_subnet)
+          get_split_addr(avail_address[0]+block,
             avail_address[0]+avail_block, cidr)
           break
         else:
@@ -83,5 +85,3 @@ class Subnet_DB(object):
     if self.version == 4:
       return 2**(32-cidr)
     return 2**(128-cidr)
-
-
