@@ -1,10 +1,11 @@
 import ipaddress
 from .subnet import Subnet
 from .ip_tracker import IP_tracker
+from ..statics import Statics
 
 class Subnet_DB(object):
   def __init__(self, address_block):
-    self.address_space = address_block
+    self.address_space = [address_block]
     self.version = self.address_space[0].version
     self.subnets = dict() #network string -> IP_tracker
     self.subnets_lst = list() #list of network subnets using ipaddress.IPv4Network()
@@ -16,7 +17,7 @@ class Subnet_DB(object):
     if self.version == 4:
       (cidr, block) = self.get_cidr_block_from_hosts(hosts)
     else:
-      (cidr, block) = (64, self.get_block_size_from_cidr(64))
+      (cidr, block) = (64, Statics.get_block_size_from_cidr(64, self.version))
 
     def add(name, network):
       subnet = Subnet(name, network)
@@ -30,7 +31,7 @@ class Subnet_DB(object):
         return list() #sqeeze and sort address_space
       else:
         holder.append(ipaddress.ip_network("{}/{}".format(start, cidr)))
-        return get_split_addr(start+self.get_block_size_from_cidr(cidr),
+        return get_split_addr(start+Statics.get_block_size_from_cidr(cidr, self.version),
           stop, cidr-1)
 
     while True:
@@ -39,7 +40,7 @@ class Subnet_DB(object):
         break
       else:
         avail_address = self.address_space.pop()
-        avail_block = self.get_block_size_from_cidr(avail_address.prefixlen)
+        avail_block = Statics.get_block_size_from_cidr(avail_address.prefixlen, self.version)
 
         if avail_block == block:
           add(name, avail_address)
@@ -80,8 +81,3 @@ class Subnet_DB(object):
       return 128-host_bits
     else:
       return self.get_cidr_from_block(block, pow_2*2, host_bits+1)
-
-  def get_block_size_from_cidr(self, cidr):
-    if self.version == 4:
-      return 2**(32-cidr)
-    return 2**(128-cidr)

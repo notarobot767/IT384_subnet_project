@@ -12,5 +12,6 @@ def main(argc, argv):
     for name, hosts in argv[1]:
       ctrl.add_new_subnet(hosts, name, True)
 
+  print()
   Misc.welcome_banner()
   view.text_gui.run()

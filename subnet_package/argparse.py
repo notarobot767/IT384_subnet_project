@@ -3,7 +3,7 @@ from .main import main
 from .statics import Statics
 
 def get_network(net_str):
-  return [ipaddress.ip_network(net_str)]
+  return ipaddress.ip_network(net_str)
 
 def ask_keep_going():
   while True:
@@ -66,6 +66,6 @@ def parse_args():
     print("File '{}' could not be opened!".format(args.R))
     return -1
 
-  print("Requrements to add:\n{}\n".format(argv)) #remove later
+  #print("Requrements to add:\n{}\n".format(argv)) #remove later
   main(len(argv), argv)
   

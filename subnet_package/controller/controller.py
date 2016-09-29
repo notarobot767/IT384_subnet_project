@@ -32,7 +32,7 @@ class Controller(object):
 
   #ip_tracker
   ############################################################
-  def get_tracker(self, subnet):
+  def _get_tracker(self, subnet):
     return self._subnet_db.subnets[subnet]
 
   def get_hosts_dhcp_unavail(self, tracker):
@@ -48,9 +48,9 @@ class Controller(object):
       tracker.get_dns()
     )
 
-  def get_subnet_info(self, tracker):
+  def get_subnet_info(self, subnet):
+    tracker = self._get_tracker(subnet)
     return (
-      tracker.network,
       tracker.get_broadcast(),
       tracker.get_defaultGateway(),
       tracker.get_hostRange(),

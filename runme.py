@@ -8,6 +8,12 @@ a given list of requirements that can also manage the hosts of each subnet
 """
 This is not a database. Subnets and hosts created from the last run will not
 be persistent.
+
+IPv6 subnets will always get a /64 subnet regardless of host requirements
+
+There is no need to print redundent information such as first and last usable
+address if it's included in the host range. The same goes for the CIDR if it
+is already on the network address.
 """
 
 # Concept (How) ---------------------------------------------------------------

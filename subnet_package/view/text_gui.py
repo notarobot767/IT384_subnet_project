@@ -38,8 +38,7 @@ class Text_GUI(object):
         break
       elif choice.isdigit() and int(choice) > 0 and int(choice) < i:
 
-        self._run_subnet_menu(self.ctrl.get_tracker(
-          self.ctrl.get_subnets_lst()[int(choice)-1]))
+        self._run_subnet_menu(self.ctrl.get_subnets_lst()[int(choice)-1])
       else:
         self._print_invalid()
 
@@ -48,8 +47,29 @@ class Text_GUI(object):
     #net_str = input("Enter your subnet followed by CIDR: ")
     #self.ctrl.add_new_subnet(net_str, True)
 
-  def delete_subnet(self):
-    self.ctrl.delete_subnet(True)
+  def display_tracked(self):
+    subnets_lst = self.ctrl.get_subnets_lst()
+    total_args = 5
+    star_wall = "*"*39 + "\n"
+
+    print_str = ""
+    for subnet in subnets_lst:
+      (broadcast, gateway, hostrange, dns) = \
+        self.ctrl.get_subnet_info(subnet)
+      print_str += self._wall
+      print_str += ("{:17}{}\n"*total_args).format(
+        "Name:", subnet.name,
+        "Assigned Hosts:", subnet.block-2,
+        "Network:", subnet.network,
+        "Host Range:", hostrange,
+        "Broadcast:", broadcast
+      ).rstrip()
+      print_str += "\n" + self._wall
+    print_str += star_wall
+    print_str += "The following subnets were unsupported:\n"
+    print_str += star_wall
+    print(print_str)
+
 
   #main menu
   ########################################################
@@ -57,9 +77,9 @@ class Text_GUI(object):
     while True:
       print(
         self._pound_word("Main Menu") + "\n"
-        "[1] - Create subnet\n" +
+        "[1] - Enter new requirement\n" +
         "[2] - View/Modify created subnets\n" +
-        "[3] - Delete a subnet\n" +
+        "[3] - Display tracked subnets\n" +
         "[4] - Exit"
         )
       choice = self._get_choice(); print()
@@ -69,7 +89,7 @@ class Text_GUI(object):
       elif choice == "2":
         self.view_modify()
       elif choice == "3":
-        self.delete_subnet()
+        self.display_tracked()
       elif choice == "4":
         Misc.exit_msg()
         break
