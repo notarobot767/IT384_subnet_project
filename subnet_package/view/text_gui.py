@@ -37,8 +37,8 @@ class Text_GUI(object):
       if choice == str(i):
         break
       elif choice.isdigit() and int(choice) > 0 and int(choice) < i:
-
-        self._run_subnet_menu(self.ctrl.get_subnets_lst()[int(choice)-1])
+        tracker = self.ctrl._get_tracker(self.ctrl.get_subnets_lst()[int(choice)-1])
+        self._run_subnet_menu(tracker)
       else:
         self._print_invalid()
 
@@ -51,11 +51,12 @@ class Text_GUI(object):
     subnets_lst = self.ctrl.get_subnets_lst()
     total_args = 5
     star_wall = "*"*39 + "\n"
+    unsupported = self.ctrl.get_unsupported_lst()
 
     print_str = ""
     for subnet in subnets_lst:
       (broadcast, gateway, hostrange, dns) = \
-        self.ctrl.get_subnet_info(subnet)
+        self.ctrl.get_subnet_info(self.ctrl._get_tracker(subnet))
       print_str += self._wall
       print_str += ("{:17}{}\n"*total_args).format(
         "Name:", subnet.name,
@@ -67,7 +68,11 @@ class Text_GUI(object):
       print_str += "\n" + self._wall
     print_str += star_wall
     print_str += "The following subnets were unsupported:\n"
-    print_str += star_wall
+    if unsupported:
+      print_str += "\n".join(unsupported)
+    else:
+      print_str += "None"
+    print_str += "\n" + star_wall
     print(print_str)
 
 
@@ -123,10 +128,10 @@ class Text_GUI(object):
       self._show_hosts_reserved(tracker)
 
   def _show_subnet(self, tracker):
-    (network, broadcast, gateway, host_range, dns) = self.ctrl.get_subnet_info(tracker)
+    (broadcast, gateway, host_range, dns) = self.ctrl.get_subnet_info(tracker)
     print(self._wall +
       "Network:\t{}\nBroadcast:\t{}\nGateway:\t{}\nHost range:\t{}\nDNS:\t\t{}\n".format(
-      network,
+      tracker.network,
       broadcast,
       gateway,
       host_range,

@@ -15,6 +15,9 @@ class Controller(object):
   def get_subnets_lst(self):
     return self._subnet_db.subnets_lst
 
+  def get_unsupported_lst(self):
+    return self._subnet_db.unsupported_lst
+
   def add_new_subnet(self, hosts, name, verbose=False):
     try:
       hosts = int(hosts)
@@ -48,8 +51,8 @@ class Controller(object):
       tracker.get_dns()
     )
 
-  def get_subnet_info(self, subnet):
-    tracker = self._get_tracker(subnet)
+  def get_subnet_info(self, tracker):
+    #tracker = self._get_tracker(subnet)
     return (
       tracker.get_broadcast(),
       tracker.get_defaultGateway(),

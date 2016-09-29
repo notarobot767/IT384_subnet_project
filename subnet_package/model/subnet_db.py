@@ -10,6 +10,7 @@ class Subnet_DB(object):
     self.subnets = dict() #network string -> IP_tracker
     self.subnets_lst = list() #list of network subnets using ipaddress.IPv4Network()
     #takes more memory but will only have to sort once when adding/deleting
+    self.unsupported_lst = list()
 
   def add_new_subnet(self, hosts, name):
     holder = list()
@@ -36,6 +37,7 @@ class Subnet_DB(object):
 
     while True:
       if not self.address_space:
+        self.unsupported_lst.append("{}, {}".format(name, hosts))
         print("There is no space for requirement '{}'!".format(name))
         break
       else:
