@@ -1,3 +1,8 @@
+'''
+The base model. Not much actually goes on in here except for creating the
+subcomponets such as the subnet database.
+'''
+
 from .subnet_db import Subnet_DB
 
 class Model(object):

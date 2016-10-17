@@ -1,3 +1,8 @@
+'''
+The bread of the model. This keeps track of all networks as well as allows
+the addition of new networks. Works hand in hand with the ip_tracker.
+'''
+
 import ipaddress
 from .subnet import Subnet
 from .ip_tracker import IP_tracker

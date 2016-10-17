@@ -1,3 +1,8 @@
+'''
+As the name suggests, the main function. Initializes the model, controller, and view.
+Main then launches the view which in this case is a text gui.
+'''
+
 from .model.model import Model
 from .controller.controller import Controller
 from .view.view import View

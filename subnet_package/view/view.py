@@ -1,3 +1,8 @@
+'''
+An object view that contains all views that the user can actually use. Currently
+that is just the text_gui.
+'''
+
 from ..controller.controller import Controller
 from .text_gui import Text_GUI
 

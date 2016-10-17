@@ -1,3 +1,8 @@
+'''
+The main view for this project. This is what the user uses to interact with the
+program. The view should only call controller methods and never the model.
+'''
+
 import ipaddress
 from ..controller.controller import Controller
 from ..misc import Misc

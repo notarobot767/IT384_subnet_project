@@ -1,5 +1,8 @@
+'''
+The controller. This essentially is the API. Any view should call these methods
+to interact with the model.
+'''
 import ipaddress
-#from ..model.ip_tracker import IP_tracker
 from ..model.model import Model
 
 class Controller(object):

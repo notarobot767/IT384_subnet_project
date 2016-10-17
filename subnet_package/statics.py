@@ -1,3 +1,7 @@
+'''
+funcions used accross multiple files
+'''
+
 class Static(object):
   def read_file(self, file_name):
     with open(file_name, "r") as input_file:

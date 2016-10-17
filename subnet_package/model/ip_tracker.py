@@ -1,3 +1,9 @@
+'''
+The butter of the model. Each network from subnet_db points to its own ip_tracker.
+The tracker allows adding and removing hosts as well as requests about information
+of the subnet.
+'''
+
 import ipaddress, itertools
 
 class IP_tracker(object):

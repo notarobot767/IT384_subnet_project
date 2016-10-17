@@ -1,3 +1,8 @@
+'''
+parses the command line input and send the address_space and requirements(if any)
+to main
+'''
+
 import argparse, sys, ipaddress
 from .main import main
 from .statics import Statics
