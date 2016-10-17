@@ -3,13 +3,13 @@ from .controller.controller import Controller
 from .view.view import View
 from .misc import Misc
 
-def main(argc, argv):
-  _mod = Model(argv[0]) #sending address block to main
+def main(address_space, requirements=None):
+  _mod = Model(address_space) #sending address block to model
   ctrl = Controller(_mod)
   view = View(ctrl)
 
-  if(argc == 2): #checking if requirements argument was passed
-    for name, hosts in argv[1]:
+  if(requirements != None): #checking if requirements argument was passed
+    for name, hosts in requirements:
       ctrl.add_new_subnet(hosts, name, True)
 
   print()

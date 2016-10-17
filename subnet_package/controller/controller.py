@@ -26,12 +26,10 @@ class Controller(object):
       return False
     return self._subnet_db.add_new_subnet(hosts, name)
         
-    
   def delete_subnet(self, verbose=False):
     if verbose:
       print("method has been depreciated!\n")
     return False
-    #self._subnet_db.delete_subnet(net_str)
 
   #ip_tracker
   ############################################################
@@ -58,6 +56,16 @@ class Controller(object):
       tracker.get_defaultGateway(),
       tracker.get_hostRange(),
       tracker.get_dns()
+    )
+
+  def get_csv_export(self, tracker):
+    return (
+      tracker.name,
+      tracker.get_netmask(),
+      tracker.get_defaultGateway(),
+      tracker.get_dns(),
+      tracker.host_dhcp_unavail,
+      tracker.descript_map
     )
 
   def get_descript_map(self, tracker):

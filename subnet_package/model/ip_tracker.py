@@ -2,6 +2,7 @@ import ipaddress, itertools
 
 class IP_tracker(object):
   def __init__(self, subnet):
+    self.name = subnet.name
     self.network = subnet.network
     self.host_dhcp_avail = self.network.hosts()
     self.host_dhcp_unavail = list()

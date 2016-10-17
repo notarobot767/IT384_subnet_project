@@ -59,6 +59,10 @@ class Subnet_DB(object):
 
     while holder:
       self.address_space.append(holder.pop())
+
+    print(self.address_space)
+    self.address_space = sorted(list(ipaddress.collapse_addresses(self.address_space)),
+      key=lambda x: (-x.prefixlen))
   
   def delete_subnet(self, net_str):
     del self.subnets[net_str]

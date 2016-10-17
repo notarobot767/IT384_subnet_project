@@ -1,0 +1,10 @@
+network name,Operations
+
+netmask,ffff:ffff:ffff:ffff::
+default gateway,2001:dead:beef:0:ffff:ffff:ffff:fffe
+dns,2001:4860:4860::8888  2001:4860:4860::8844
+
+S-2,2001:dead:beef::1
+S-2 NCOIC,2001:dead:beef::2
+S-2 Printer,2001:dead:beef::3
+S-2 analyst,2001:dead:beef::4

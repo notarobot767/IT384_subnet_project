@@ -41,7 +41,7 @@ def get_requirements(file_name):
 
   return sorted_dic(require_dic)
 
-def parse_args():
+def _get_parser():
   parser = argparse.ArgumentParser(
     description="Automated Subnet Calculator"
   )
@@ -52,20 +52,25 @@ def parse_args():
   parser.add_argument("N", type=str,
     help="Allocated network block of IP space ex) 172.16.0.0/16"
   )
-  args = parser.parse_args()
-  argv = list()
+  return parser.parse_args()
+
+def parse_args():
+  args = _get_parser()
 
   try:
-    argv.append(get_network(args.N))
-    if True:
-      argv.append(get_requirements(args.r))
+    address_space = get_network(args.N)
+    if args.r != None:
+      requirements = get_requirements(args.r)
+    else:
+      requirements = None
+    
   except ValueError:
     print("'{}' does not appear to be an IPv4 or IPv6 network".format(args.N))
     return -1
   except FileNotFoundError:
-    print("File '{}' could not be opened!".format(args.R))
+    print("File '{}' could not be opened!".format(args.r))
     return -1
 
+  main(address_space, requirements)
+
   #print("Requrements to add:\n{}\n".format(argv)) #remove later
-  main(len(argv), argv)
-  

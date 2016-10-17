@@ -10,20 +10,21 @@ class Miscellaneous(object):
       "Welcome to the NHK! - IT384",
       "ASCII art makes the code run faster, right? - IT384",
       "MAJ Hutchison is not a softie! - IT384",
-      "The files are in the computer. - IT384"
+      "The files are in the computer. - IT384",
+      "The enimies gate is down! - IT384",
     ])
   
-  def exit_msg(self):
-    self._print([
-      "\nBreak, Break, Break! - FM24-19",
-      "\nI'm done like a potato in the oven!",
-      "\nWhat happened? Did you see an evil bit?... (RFC 3514)",
-      "\nCan you hear me MAJ Tom?"
-    ])
-
   def cut_sling_load(self):
     self._print([
-      "\n\nCutting Sling Load - Air Assault!\n" + \
+      "\n\nBreak, Break, Break! - FM24-19",
+      "\n\nI'm done like a potato in the oven!",
+      "\n\nWhat happened? Did you see an evil bit?... (RFC 3514)",
+      "\n\nCan you hear me MAJ Tom?"
+    ])
+
+  def exit_msg(self):
+    self._print([
+      "\n\nAir Assault!\n" + \
       "   ______.........--=T=--.........______\n" + \
       "      .             |:|\n" + \
       " :-. //           /\"\"\"\"\"\"-.\n" + \
