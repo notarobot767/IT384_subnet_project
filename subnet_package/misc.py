@@ -11,7 +11,7 @@ class Miscellaneous(object):
       "ASCII art makes the code run faster, right? - IT384",
       "MAJ Hutchison is not a softie! - IT384",
       "The files are in the computer. - IT384",
-      "The enimies gate is down! - IT384",
+      "The enemy's gate is down! - IT384",
     ])
   
   def cut_sling_load(self):

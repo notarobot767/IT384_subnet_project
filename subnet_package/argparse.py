@@ -7,9 +7,6 @@ import argparse, sys, ipaddress
 from .main import main
 from .statics import Statics
 
-def get_network(net_str):
-  return ipaddress.ip_network(net_str)
-
 def ask_keep_going():
   while True:
     choice = input("Would you like to continue anyway? [y | n] ")
@@ -52,10 +49,11 @@ def _get_parser():
   )
   parser.add_argument("-r", type=str,
     default=None, metavar='requirements',
-    help="path to requirements text document"
+    help="path to requirements text document; line ex) [Str],[Int]"
   )
-  parser.add_argument("N", type=str,
-    help="Allocated network block of IP space ex) 172.16.0.0/16"
+  parser.add_argument("N", type=ipaddress.ip_network,
+    help="Allocated network block of IP space ex) 172.16.0.0/16; " +
+    "CIDR for IPv4 <= 30 for IPv6 <=64"
   )
   return parser.parse_args()
 
@@ -63,11 +61,19 @@ def parse_args():
   args = _get_parser()
 
   try:
-    address_space = get_network(args.N)
+    if args.N.version == 4:
+      if args.N.prefixlen > 30:
+        print("IPv4 needs at least a /30 CIDR!")
+        return -1
+    else:
+      if args.N.prefixlen > 64:
+        print("IPv6 needs at least a /64 CIDR!")
+        return -1
+
     if args.r != None:
       requirements = get_requirements(args.r)
     else:
-      requirements = None
+      requirements = args.r
     
   except ValueError:
     print("'{}' does not appear to be an IPv4 or IPv6 network".format(args.N))
@@ -75,7 +81,9 @@ def parse_args():
   except FileNotFoundError:
     print("File '{}' could not be opened!".format(args.r))
     return -1
+  except ValueError:
+    print("{} has host bits set!".format(args.N))
+    return -1
 
-  main(address_space, requirements)
-
-  #print("Requrements to add:\n{}\n".format(argv)) #remove later
+  main(args.N, requirements)
+    #I wanted separate except clauses within main and subcomponets

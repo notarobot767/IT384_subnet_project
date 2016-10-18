@@ -18,6 +18,10 @@ class Subnet_DB(object):
     self.unsupported_lst = list()
 
   def add_new_subnet(self, hosts, name):
+    for subnet in self.subnets_lst:
+      if subnet.name == name:
+        print("Name already exists!")
+        return None
     holder = list()
 
     if self.version == 4:
@@ -64,8 +68,6 @@ class Subnet_DB(object):
 
     while holder:
       self.address_space.append(holder.pop())
-
-    print(self.address_space)
     self.address_space = sorted(list(ipaddress.collapse_addresses(self.address_space)),
       key=lambda x: (-x.prefixlen))
   
@@ -80,7 +82,7 @@ class Subnet_DB(object):
       self.get_block_size_from_hosts(hosts, pow_2*2)
 
   def get_cidr_block_from_hosts(self, hosts, pow_2=4, base=2):
-    if pow_2-2 > hosts+1:
+    if pow_2-2 >= hosts+1:
       return (32-base, pow_2)
     else:
       return self.get_cidr_block_from_hosts(hosts, pow_2*2, base+1)

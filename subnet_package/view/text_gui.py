@@ -49,7 +49,6 @@ class Text_GUI(object):
         self._print_invalid()
 
   def add_new_subnet(self):
-    print("Not yet implemted!\n")
     name = input("Enter requirement name: ").strip()
     hosts_count = input("Enter number of hosts: ").strip()
     self.ctrl.add_new_subnet(hosts_count, name, True)
@@ -85,7 +84,7 @@ class Text_GUI(object):
         print_str += "None"
       print_str += "\n" + star_wall
     else:
-      print_str += "None"
+      print_str += "None\n"
     print(print_str)
 
 

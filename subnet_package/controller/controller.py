@@ -24,8 +24,11 @@ class Controller(object):
   def add_new_subnet(self, hosts, name, verbose=False):
     try:
       hosts = int(hosts)
+      if hosts <= 0:
+        print("hosts must be greater than 0!")
+        return None
     except:
-      print("Hosts must be an integer!")
+      print("Hosts must be an positive integer!")
       return False
     return self._subnet_db.add_new_subnet(hosts, name)
         

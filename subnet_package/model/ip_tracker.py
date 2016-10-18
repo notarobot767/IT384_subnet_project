@@ -50,8 +50,11 @@ class IP_tracker(object):
 
   def assign_ip(self, descript):
     ip = None
-    while ip == None or ip in self.host_dhcp_reserved:
-      ip = next(self.host_dhcp_avail)
+    try:
+      while ip == None or ip in self.host_dhcp_reserved:
+        ip = next(self.host_dhcp_avail)
+    except StopIteration:
+      return None
       #instead of removing reserved IPs from the start from the iterator,
       #just remove as you get to them
     
